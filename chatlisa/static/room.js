@@ -3,6 +3,8 @@ const chatLog = document.querySelector('#chat-log')
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 console.log('Room Name:', roomName)
 
+  
+// To Indicate that there are no messages
 if (!chatLog.hasChildNodes()) {
     const emptyText = document.createElement('h3')
     emptyText.id = 'emptyText'
@@ -12,6 +14,13 @@ if (!chatLog.hasChildNodes()) {
     console.log(emptyText)
 }
 
+// const text_to_remove = document.querySelector('#emptyText')
+// console.log('Here is the text to remove', text_to_remove)
+// if (text_to_remove) {
+//     text_to_remove.remove()
+// }
+
+// Connect to the Websocket
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
@@ -20,26 +29,29 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
-// const chatSocket = new WebSocket('ws://127.0.0.1:8080/ws/chat/lobby', 'echo-protocol');
-
 console.log('Here is the Chat Socket:', chatSocket)
 
+// Create and display chat socket message
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     // document.querySelector('#chat-log').value += (data.message + '\n');
 
     // Create a new message element
-    const messageElement = document.createElement('div');
+    const messageElement = document.createElement('div')
     messageElement.innerText = data.message
     messageElement.className = 'message'
 
     // Append the message element to the chatLog container
     chatLog.appendChild(messageElement)
     console.log(messageElement)
-    
-    
+
+    // Remove 'No Messages' text if there is a message
+    if (document.querySelector('#emptyText')) {
+        document.querySelector('#emptyText').remove()
+    }
 
 };
+
 
 chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
