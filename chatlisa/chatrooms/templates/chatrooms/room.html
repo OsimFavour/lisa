@@ -7,11 +7,14 @@
     </head>
     <body>
         <div class="container">
-            <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+            <div id="chat-log"></div>
+        </div>
+        <div class="container">
+            <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br> -->
             <input class="textInput" id="chat-message-input" type="text" size="100"><br>
             <input class="button" id="chat-message-submit" type="button" value="Send">
             {{ room_name|json_script:"room-name" }}
         </div>
-        <script src="{% static "room.js" %}"></script>
+        <script src="{% static 'room.js' %}"></script>
     </body>
 </html>
