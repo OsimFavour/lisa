@@ -34,13 +34,25 @@ console.log('Here is the Chat Socket:', chatSocket)
 // Create and display chat socket message
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
+    console.log('The Whole Data:', data)
     // document.querySelector('#chat-log').value += (data.message + '\n');
 
     // Create a new message element
     const messageElement = document.createElement('div')
+    const userId = data['user_id']
+    const loggedInUserId = JSON.parse(document.getElementById('user_id').textContent)
+    console.log(loggedInUserId)
+    
+    // Get Message Text from JSON
     messageElement.innerText = data.message
-    messageElement.className = 'message'
+    // messageElement.className = 'message'
 
+    if (userId === loggedInUserId) {
+        messageElement.classList.add('message', 'sender')
+    }
+    else {
+        messageElement.classList.add('message', 'receiver')
+    }
     // Append the message element to the chatLog container
     chatLog.appendChild(messageElement)
     console.log(messageElement)
