@@ -12,8 +12,21 @@
         <a href="{% url 'index' %}" class="leaveButton">Leave Room</a>
 
         <div class="container">
-            <div id="chat-log"></div>
+            <div id="chat-log">
+                {% for chat in chats.all %}
+                    {% if chat.user.id == request.user.id %}
+                        <div class="message sender">
+                            {{ chat.content }}
+                        </div>
+                    {% else %}
+                        <div class="message receiver">
+                            {{ chat.content }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
+        
         <div class="container">
             <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br> -->
             <input class="textInput" id="chat-message-input" type="text" size="100"><br>

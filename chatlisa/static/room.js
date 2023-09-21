@@ -5,7 +5,7 @@ console.log('Room Name:', roomName)
 
   
 // To Indicate that there are no messages
-if (!chatLog.hasChildNodes()) {
+if (chatLog.childNodes.length <= 1) {
     const emptyText = document.createElement('h3')
     emptyText.id = 'emptyText'
     emptyText.innerText = 'No Messages'
@@ -14,11 +14,6 @@ if (!chatLog.hasChildNodes()) {
     console.log(emptyText)
 }
 
-// const text_to_remove = document.querySelector('#emptyText')
-// console.log('Here is the text to remove', text_to_remove)
-// if (text_to_remove) {
-//     text_to_remove.remove()
-// }
 
 // Connect to the Websocket
 const chatSocket = new WebSocket(

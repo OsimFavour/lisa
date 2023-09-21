@@ -1,6 +1,9 @@
 import json
 # from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
+from .models import Chat, ChatRoom
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -33,6 +36,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         self.user_id = self.scope['user'].id
         print(f'User ID: {self.user_id}')
+
+        # Find room object
+        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+
+        # Create new chat object
+        chat = Chat(
+            content=message,
+            user=self.scope['user'],
+            room=room
+        )
+        print(f'Chat Object: {chat}')
+
+        # You don't call a function inside this database async function
+        await database_sync_to_async(chat.save)()
 
         # Send message to room group
         await self.channel_layer.group_send(
