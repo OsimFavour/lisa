@@ -31,16 +31,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         print(f"Receiver's message: {message}")
 
+        self.user_id = self.scope['user'].id
+        print(f'User ID: {self.user_id}')
+
         # Send message to room group
         await self.channel_layer.group_send(
-            self.room_group_name, {'type': 'chat.message', 'message': message}
+            self.room_group_name, {
+                'type': 'chat.message', 
+                'message': message,
+                'user_id': self.user_id
+                }
         )
 
     async def chat_message(self, event):
         message = event['message']
         print(f'Chat Message: {message}')
 
+        user_id = event['user_id']
+        print(f'Event received: {event}')
+
+        print(f'Received User ID: {user_id}')
+        
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'user_id': user_id
         })) 
